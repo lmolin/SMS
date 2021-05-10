@@ -18,8 +18,7 @@ public class CourseService implements CourseDAO {
 
         //create query
         EntityManager em = MainRunner.emf.createEntityManager();
-        Query allCourses = em.createQuery("SELECT c from COURSE c");
-        em.close();
+        Query allCourses = em.createQuery("SELECT c from Course c");
 
         //convert List<Object> to List<Course>
         List<Course> courseList = new ArrayList<Course>();
@@ -28,6 +27,7 @@ public class CourseService implements CourseDAO {
         }
 
         //return query as list
+        em.close();
         return courseList;
     }
 }
