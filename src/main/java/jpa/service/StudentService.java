@@ -47,13 +47,18 @@ public class StudentService implements StudentDAO {
 
     @Override
     public boolean validateStudent(String sEmail, String sPassword) {
-        //retrieve student
-        Student student = getStudentByEmail(sEmail);
 
-        //check if password is correct
-        if (student.getSPass().equals(sPassword))
-            return true;
-        else return false;
+        try {
+            //retrieve student
+            Student student = getStudentByEmail(sEmail);
+
+            //check if password is correct
+            if (student.getSPass().equals(sPassword))
+                return true;
+            else return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     @Override
@@ -71,17 +76,25 @@ public class StudentService implements StudentDAO {
         Student student = getStudentByEmail(sEmail);
 
         //check that student is not already in course
-        List<Course> studentCourses = student.getSCourses();
+        List<Course> studentCourses = getStudentCourses(sEmail);
         if (!studentCourses.contains(course)) {
 
-            //update course list and set that as student's course list
-            studentCourses.add(course);
-            student.setSCourses(studentCourses);
+            try {
+                //update course list and set that as student's course list
+                studentCourses.add(course);
+                student.setSCourses(studentCourses);
 
-            //commit changes
-            em.merge(student);
-            em.getTransaction().commit();
-            em.close();
+                //commit changes
+                em.merge(student);
+                em.getTransaction().commit();
+
+            } catch(Exception e) {
+                //rollback transaction
+                em.getTransaction().rollback();
+                System.out.println("Error registering for course." +
+                                    " Please check that you are not already registered.");
+
+            } finally { em.close(); }
         }
     }
 
