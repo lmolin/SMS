@@ -16,14 +16,15 @@ public class StudentService implements StudentDAO {
     @Override
     public List<Student> getAllStudents() {
 
+        List<Student> studentList = new ArrayList<Student>();
+
         //create query
         EntityManager em = MainRunner.emf.createEntityManager();
         Query allStudents = em.createQuery("SELECT s FROM student s");
         em.close();
 
         //convert List<Object> from query to List<Student>
-        List<Student> studentList = new ArrayList<Student>();
-        for(Object student: allStudents.getResultList()) {
+        for (Object student : allStudents.getResultList()) {
             studentList.add((Student) student);
         }
 
@@ -59,8 +60,7 @@ public class StudentService implements StudentDAO {
     public void registerStudentToCourse(String sEmail, int cId) {
         //start transaction
         EntityManager em = MainRunner.emf.createEntityManager();
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
+        em.getTransaction().begin();
 
         //Find course by id
         Query query = em.createQuery("SELECT c FROM Course c WHERE Id = ?1");
@@ -78,8 +78,9 @@ public class StudentService implements StudentDAO {
             studentCourses.add(course);
             student.setSCourses(studentCourses);
 
-            //persist changes
-            em.persist(student);
+            //commit changes
+            em.merge(student);
+            em.getTransaction().commit();
             em.close();
         }
     }

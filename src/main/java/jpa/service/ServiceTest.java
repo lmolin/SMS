@@ -39,13 +39,12 @@ public class ServiceTest {
     }
 
     @Test
-    //this test assumes getStudentCourses method works. use testGetStudentCourses
     public void testRegisterStudentToCourse() {
         //execute method to test
         sService.registerStudentToCourse("aiannitti7@is.gd", 1);
 
         //check that student is registered to course
-        List<Course> courseList = sService.getStudentCourses("aiannitti7@is.gd");
+        List<Course> courseList = sService.getStudentByEmail("aiannitti7@is.gd").getSCourses();
         Assert.assertTrue(courseList.get(0).getCId() == 1);
     }
 }

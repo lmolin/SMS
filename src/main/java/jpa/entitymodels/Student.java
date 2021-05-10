@@ -14,7 +14,9 @@ public class Student {
     private String sName;
     @Column (name = "password")
     private String sPass;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "email"),
+                inverseJoinColumns = @JoinColumn(name = "id"))
     private List<Course> sCourses = new ArrayList<Course>();
 
     public Student() {
