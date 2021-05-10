@@ -33,15 +33,23 @@ public class StudentService implements StudentDAO {
 
     @Override
     public Student getStudentByEmail(String sEmail) {
+        //create entityManager
         EntityManager em = MainRunner.emf.createEntityManager();
+
+        //Retrieve student
         Student student = em.find(Student.class, sEmail);
+
         em.close();
+
         return student;
     }
 
     @Override
     public boolean validateStudent(String sEmail, String sPassword) {
+        //retrieve student
         Student student = getStudentByEmail(sEmail);
+
+        //check if password is correct
         if (student.getSPass().equals(sPassword))
             return true;
         else return false;
@@ -49,11 +57,35 @@ public class StudentService implements StudentDAO {
 
     @Override
     public void registerStudentToCourse(String sEmail, int cId) {
+        //start transaction
+        EntityManager em = MainRunner.emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
 
+        //Find course by id
+        Query query = em.createQuery("SELECT c FROM Course c WHERE Id = ?1");
+        query.setParameter(1, cId);
+        Course course = (Course) query.getSingleResult();
+
+        //find student by email
+        Student student = getStudentByEmail(sEmail);
+
+        //check that student is not already in course
+        List<Course> studentCourses = student.getSCourses();
+        if (!studentCourses.contains(course)) {
+
+            //update course list and set that as student's course list
+            studentCourses.add(course);
+            student.setSCourses(studentCourses);
+
+            //persist changes
+            em.persist(student);
+            em.close();
+        }
     }
 
     @Override
     public List<Course> getStudentCourses(String sEmail) {
-        return null;
+        return getStudentByEmail(sEmail).getSCourses();
     }
 }

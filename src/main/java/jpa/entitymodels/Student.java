@@ -14,8 +14,11 @@ public class Student {
     private String sName;
     @Column (name = "password")
     private String sPass;
+    @OneToMany
+    private List<Course> sCourses = new ArrayList<Course>();
 
     public Student() {
+
     }
 
     //getters and setters
@@ -43,4 +46,8 @@ public class Student {
     public void setSPass(String sPass) {
         this.sPass = sPass;
     }
+
+    public List<Course> getSCourses() { return sCourses; }
+
+    public void setSCourses(List<Course> sCourses) { this.sCourses = sCourses; }
 }
