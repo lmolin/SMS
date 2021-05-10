@@ -3,7 +3,9 @@ package jpa.entitymodels;
 import javax.persistence.*;
 
 @Entity
+@Table (name = "course")
 public class Course {
+    @Id
     @Column (name = "id")
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int cId;
@@ -13,8 +15,6 @@ public class Course {
     private String cInstructorName;
 
     public Course() {
-        cName = "null";
-        cInstructorName = "null";
     }
 
     public Course(String cName, String cInstructorName) {

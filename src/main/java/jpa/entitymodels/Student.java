@@ -1,9 +1,11 @@
 package jpa.entitymodels;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table (name = "student")
 public class Student {
     @Id
     @Column (name = "email")
@@ -12,46 +14,33 @@ public class Student {
     private String sName;
     @Column (name = "password")
     private String sPass;
-    private List<Course> sCourses;
 
     public Student() {
-        sEmail = "null";
-        sName = "null";
-        sPass = "null";
-
     }
 
     //getters and setters
 
-    public String getsEmail() {
+    public String getSEmail() {
         return sEmail;
     }
 
-    public void setsEmail(String sEmail) {
+    public void setSEmail(String sEmail) {
         this.sEmail = sEmail;
     }
 
-    public String getsName() {
+    public String getSName() {
         return sName;
     }
 
-    public void setsName(String sName) {
+    public void setSName(String sName) {
         this.sName = sName;
     }
 
-    public String getsPass() {
+    public String getSPass() {
         return sPass;
     }
 
-    public void setsPass(String sPass) {
+    public void setSPass(String sPass) {
         this.sPass = sPass;
-    }
-
-    public List<Course> getsCourses() {
-        return sCourses;
-    }
-
-    public void setsCourses(List<Course> sCourses) {
-        this.sCourses = sCourses;
     }
 }
